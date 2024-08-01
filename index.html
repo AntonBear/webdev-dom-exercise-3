@@ -8,8 +8,9 @@
 
   <body>
     <div class="container">
-      <ul class="comments">
-        <li class="comment">
+      <ul id="comments" class="comments">
+        <!--  -->
+        <li id="comment" class="comment">
           <div class="comment-header">
             <div>Глеб Фокин</div>
             <div>12.02.22 12:18</div>
@@ -26,6 +27,7 @@
             </div>
           </div>
         </li>
+        <!--  -->
         <li class="comment">
           <div class="comment-header">
             <div>Варвара Н.</div>
@@ -43,29 +45,71 @@
             </div>
           </div>
         </li>
+        <!--  -->
       </ul>
+
+      <!--  -->
       <div class="add-form">
         <input
+          id="input"
           type="text"
           class="add-form-name"
           placeholder="Введите ваше имя"
         />
         <textarea
+          id="textarea"
           type="textarea"
           class="add-form-text"
           placeholder="Введите ваш коментарий"
           rows="4"
         ></textarea>
         <div class="add-form-row">
-          <button class="add-form-button">Написать</button>
+          <button id="button" class="add-form-button">Написать</button>
         </div>
       </div>
+      <!--  -->
     </div>
   </body>
 
   <script>
-    "use strict";
-    // Код писать здесь
-    console.log("It works!");
+    'use strict'
+    const addFormButton = document.getElementById('button')
+    addFormButton.addEventListener('click', function () {
+      const oldListComments = comments.innerHTML
+      const inputValue = document.getElementById('input').value
+      const inputAddFormName = document.getElementById('textarea').value
+      if (inputValue === '' || inputAddFormName === '') {
+        alert('Введите пожалуйста хоть что-нибудь')
+        return
+      }
+
+      const now = new Date()
+      const day = now.getDate().toString().padStart(2, '0')
+      const month = (now.getMonth() + 1).toString().padStart(2, '0')
+      const year = now.getFullYear().toString().slice(-2)
+      const hours = now.getHours().toString().padStart(2, '0')
+      const minutes = now.getMinutes().toString().padStart(2, '0')
+      const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}`
+
+      comments.innerHTML =
+        oldListComments +
+        `<li class="comment">
+          <div class="comment-header">
+            <div>${inputValue}</div>
+            <div>${formattedDate}</div>
+          </div>
+          <div class="comment-body">
+            <div class="comment-text">
+              ${inputAddFormName}
+            </div>
+          </div>
+          <div class="comment-footer">
+            <div class="likes">
+              <span class="likes-counter">${0}</span>
+              <button class="like-button -active-like"></button>
+            </div>
+          </div>
+        </li>`
+    })
   </script>
 </html>
