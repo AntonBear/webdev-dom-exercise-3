@@ -8,46 +8,7 @@
 
   <body>
     <div class="container">
-      <ul id="comments" class="comments">
-        <!--  -->
-        <li id="comment" class="comment">
-          <div class="comment-header">
-            <div>Глеб Фокин</div>
-            <div>12.02.22 12:18</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              Это будет первый комментарий на этой странице
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">3</span>
-              <button class="like-button"></button>
-            </div>
-          </div>
-        </li>
-        <!--  -->
-        <li class="comment">
-          <div class="comment-header">
-            <div>Варвара Н.</div>
-            <div>13.02.22 19:22</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              Мне нравится как оформлена эта страница! ❤
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">75</span>
-              <button class="like-button -active-like"></button>
-            </div>
-          </div>
-        </li>
-        <!--  -->
-      </ul>
-
+      <ul id="comments" class="comments"></ul>
       <!--  -->
       <div class="add-form">
         <input
@@ -73,9 +34,69 @@
 
   <script>
     'use strict'
-    const addFormButton = document.getElementById('button')
+    const now = new Date()
+    const day = now.getDate().toString().padStart(2, '0')
+    const month = (now.getMonth() + 1).toString().padStart(2, '0')
+    const year = now.getFullYear().toString().slice(-2)
+    const hours = now.getHours().toString().padStart(2, '0')
+    const minutes = now.getMinutes().toString().padStart(2, '0')
+    const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}`
+
     const listComments = document.getElementById('comments')
 
+    const comments = [
+      {
+        inputValue: 'Anton',
+        inputAddFormName: 'hello',
+        date: formattedDate,
+        isliked: true,
+      },
+    ]
+
+    const initLikeButton = () => {
+      const likes = document.querySelectorAll('.like-button')
+      for (const like of likes) {
+        like.addEventListener('click', function () {
+          like.dataset.isliked = true
+          like.className = like.dataset.isliked
+            ? '-active-like like-button'
+            : 'like-button -active-like '
+        })
+      }
+    }
+
+    const renderComments = () => {
+      const commentsHTML = comments
+        .map((comment, id) => {
+          return `<li class="comment" data-id="${id}">
+          <div class="comment-header">
+            <div>${comment.inputValue}</div>
+            <div>${comment.date}</div>
+          </div>
+          <div class="comment-body">
+            <div class="comment-text">
+              ${comment.inputAddFormName}
+            </div>
+          </div>
+          <div class="comment-footer">
+            <div class="likes">
+              <span class="likes-counter">${comment.isliked ? 1 : 0}</span>
+
+              <button class=${
+                comment.isliked ? '-active-like' : 'like-button'
+              } data-isliked="${comment.isliked}"></button>
+
+            </div>
+          </div>
+        </li>`
+        })
+        .join('')
+      listComments.innerHTML = commentsHTML
+      initLikeButton()
+    }
+    renderComments()
+
+    const addFormButton = document.getElementById('button')
     addFormButton.addEventListener('click', function () {
       const inputValue = document.getElementById('input').value
       const inputAddFormName = document.getElementById('textarea').value
@@ -84,35 +105,14 @@
         return
       }
 
-      const now = new Date()
-      const day = now.getDate().toString().padStart(2, '0')
-      const month = (now.getMonth() + 1).toString().padStart(2, '0')
-      const year = now.getFullYear().toString().slice(-2)
-      const hours = now.getHours().toString().padStart(2, '0')
-      const minutes = now.getMinutes().toString().padStart(2, '0')
-      const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}`
-
-      const oldListComments = listComments.innerHTML
-
-      listComments.innerHTML =
-        oldListComments +
-        `<li class="comment">
-          <div class="comment-header">
-            <div>${inputValue}</div>
-            <div>${formattedDate}</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              ${inputAddFormName}
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">${0}</span>
-              <button class="like-button -active-like"></button>
-            </div>
-          </div>
-        </li>`
+      comments.push({
+        inputValue: inputValue,
+        inputAddFormName: inputAddFormName,
+        date: formattedDate,
+        isliked: false,
+      })
+      renderComments()
+      initLikeButton()
     })
   </script>
 </html>
