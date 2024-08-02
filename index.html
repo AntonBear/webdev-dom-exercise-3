@@ -65,13 +65,23 @@
       for (const likeButton of likes) {
         likeButton.addEventListener('click', function () {
           const likeindex = likeButton.dataset.index
-          console.log(likeindex)
-          const initCountSpan = () => {
-            const counts = document.querySelectorAll('.like-counter')
-            for (const count of counts) {
-              console.log(count)
-            }
-          }
+          // console.log(likeindex)
+          const counter = document.querySelector(
+            `[data-counter-index="${likeindex}"]`
+          )
+          console.log(counter)
+
+          // const initCountSpan = () => {
+          //   const counts = document.querySelectorAll('.like-counter')
+          //   for (const count of counts) {
+          //     if (count.dataset.index == likeButton.dataset.index) {
+          //       const f = (comments[index].isliked = true)g
+          //     }
+          //   }
+          // } not bad
+
+          renderComments()
+          // console.log(comments)
         })
       }
     }
@@ -102,9 +112,9 @@
           </div>
           <div class="comment-footer">
             <div class="likes">
-              <span class="likes-counter" data-index="${index}">${
-                comment.isliked ? '1' : '0'
-              } </span>
+              <span class="likes-counter" data-counter-index="${index}">${
+            comment.isliked ? '1' : '0'
+          } </span>
 
               <button class='like-button -active-like' data-index="${index}"></button>
 
@@ -114,7 +124,7 @@
         })
         .join('')
       listComments.innerHTML = commentsHTML
-      console.log(comments)
+      // console.log(comments)
       initLikeButton()
     }
 
