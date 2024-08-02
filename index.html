@@ -69,7 +69,11 @@
           const counter = document.querySelector(
             `[data-counter-index="${likeindex}"]`
           )
-          console.log(counter)
+          // console.log(counter)
+          const fixCount = comments[likeButton.dataset.index]
+          console.log(fixCount.isliked)
+          fixCount.isliked = fixCount.isliked ? false : true
+          console.log(fixCount.isliked)
 
           // const initCountSpan = () => {
           //   const counts = document.querySelectorAll('.like-counter')
