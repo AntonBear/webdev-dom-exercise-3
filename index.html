@@ -9,7 +9,6 @@
   <body>
     <div class="container">
       <ul id="comments" class="comments"></ul>
-      <!--  -->
       <div class="add-form">
         <input
           id="input"
@@ -28,7 +27,6 @@
           <button id="button" class="add-form-button">Написать</button>
         </div>
       </div>
-      <!--  -->
     </div>
   </body>
 
@@ -53,53 +51,27 @@
       },
     ]
 
-    const initCountSpan = () => {
-      const counts = document.querySelectorAll('.like-counter')
-      for (const count of counts) {
-        count.addEventListener('click', function () {})
-      }
-    }
-
     const initLikeButton = () => {
-      const likes = document.querySelectorAll('.like-button.-active-like')
+      const likes = document.querySelectorAll('.like-button')
       for (const likeButton of likes) {
         likeButton.addEventListener('click', function () {
-          const likeindex = likeButton.dataset.index
-          // console.log(likeindex)
-          const counter = document.querySelector(
-            `[data-counter-index="${likeindex}"]`
-          )
-          // console.log(counter)
-          const fixCount = comments[likeButton.dataset.index]
-          console.log(fixCount.isliked)
-          fixCount.isliked = fixCount.isliked ? false : true
-          console.log(fixCount.isliked)
+          const likeindex = likeButton.dataset.index // нахожу значение атрибута лайк-кнопки по индексу массива
 
-          // const initCountSpan = () => {
-          //   const counts = document.querySelectorAll('.like-counter')
-          //   for (const count of counts) {
-          //     if (count.dataset.index == likeButton.dataset.index) {
-          //       const f = (comments[index].isliked = true)g
-          //     }
-          //   }
-          // } not bad
+          const counter = document.querySelector(
+            `[data-counter-index="${likeindex}"]` //   нахожу счетчик с помощью дата атрибута по общему индексу
+          )
+          const likeButtonEl = document.querySelector(
+            `[data-index="${likeindex}"]`
+          ) //   нахожу кнопку лайков с помощью дата атрибута по общему индексу
+
+          const fixCount = comments[likeindex] // нужный объект по значению индекса дата-атрибута
+
+          fixCount.isliked = fixCount.isliked ? false : true // меняю значения свойства isLike
 
           renderComments()
-          // console.log(comments)
         })
       }
     }
-
-    // const initLikeButton = () => {
-    //   const likes = document.querySelectorAll('.like-button')
-    //   for (const like of likes) {
-    //     like.addEventListener('click', function () {
-    //       const pizdos = !like.dataset.isliked
-    //       console.log(pizdos)
-    //       like.className = pizdos ? 'like-button' : '-active-like '
-    //     })
-    //   }
-    // }
 
     const renderComments = () => {
       const commentsHTML = comments
@@ -120,15 +92,17 @@
             comment.isliked ? '1' : '0'
           } </span>
 
-              <button class='like-button -active-like' data-index="${index}"></button>
-
+              <button class='${
+                comment.isliked ? 'like-button -active-like' : 'like-button'
+              }' data-index="${index}"></button>
+             
             </div>
           </div>
         </li>`
         })
         .join('')
       listComments.innerHTML = commentsHTML
-      // console.log(comments)
+
       initLikeButton()
     }
 
