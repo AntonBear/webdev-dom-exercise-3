@@ -54,7 +54,7 @@
     const initLikeButton = () => {
       const likes = document.querySelectorAll('.like-button')
       for (const likeButton of likes) {
-        likeButton.addEventListener('click', function () {
+        likeButton.addEventListener('click', function (e) {
           const likeindex = likeButton.dataset.index // нахожу значение атрибута лайк-кнопки по индексу массива
 
           const counter = document.querySelector(
@@ -67,7 +67,30 @@
           const fixCount = comments[likeindex] // нужный объект по значению индекса дата-атрибута
 
           fixCount.isliked = fixCount.isliked ? false : true // меняю значения свойства isLike
+          e.stopPropagation()
+          renderComments()
+        })
+      }
+    }
 
+    const initText = () => {
+      const texts = document.querySelectorAll('.comment-text')
+      for (const text of texts) {
+        text.addEventListener('click', function (e) {
+          const currentText = document.querySelector(
+            `[data-index='${text.dataset.index}']`
+          ) // нахожу определенный коммент по дата атрибуту
+          console.log(currentText)
+          const valueText = currentText.textContent // значение текста в комментарии
+          console.log(valueText)
+          const addFormText = document.querySelector('.add-form-text') // .value инициализирую форму ввода (значение формы ввода)
+          console.log(addFormText)
+          const deleteSpaces = valueText.replace(/\s/g, '') // удаляю пробелы
+
+          const g = (addFormText.innerText = `>${deleteSpaces}`)
+
+          const final = g.innerHTML
+          e.stopPropagation()
           renderComments()
         })
       }
@@ -78,11 +101,13 @@
         .map((comment, index) => {
           return `<li class="comment" data-idex="${index}">
           <div class="comment-header">
-            <div>${comment.inputValue}</div>
+            <div data-comment-header-index='${index}'>${
+            comment.inputValue
+          }</div>
             <div>${comment.date}</div>
           </div>
           <div class="comment-body">
-            <div class="comment-text">
+            <div class="comment-text" data-index="${index}" >
               ${comment.inputAddFormName}
             </div>
           </div>
@@ -104,12 +129,19 @@
       listComments.innerHTML = commentsHTML
 
       initLikeButton()
+      initText()
     }
 
     const addFormButton = document.getElementById('button')
     addFormButton.addEventListener('click', function () {
-      const inputValue = document.getElementById('input').value
-      const inputAddFormName = document.getElementById('textarea').value
+      const inputValue = document
+        .getElementById('input')
+        .value.replaceAll('<', '&lt')
+        .replaceAll('>', '&gt')
+      const inputAddFormName = document
+        .getElementById('textarea')
+        .value.replaceAll('<', '&lt')
+        .replaceAll('>', '&gt')
       if (inputValue === '' || inputAddFormName === '') {
         alert('Введите пожалуйста хоть что-нибудь')
         return
@@ -125,5 +157,6 @@
     })
 
     renderComments()
+    initText()
   </script>
 </html>
