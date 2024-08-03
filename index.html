@@ -44,7 +44,19 @@
 
     const comments = [
       {
-        inputValue: 'Anton228',
+        inputValue: 'Anton',
+        inputAddFormName: 'FirstCom',
+        date: formattedDate,
+        isliked: true,
+      },
+      {
+        inputValue: 'Dima',
+        inputAddFormName: 'hello',
+        date: formattedDate,
+        isliked: true,
+      },
+      {
+        inputValue: 'Dima',
         inputAddFormName: 'hello',
         date: formattedDate,
         isliked: true,
@@ -80,16 +92,28 @@
           const currentText = document.querySelector(
             `[data-index='${text.dataset.index}']`
           ) // нахожу определенный коммент по дата атрибуту
-          console.log(currentText)
-          const valueText = currentText.textContent // значение текста в комментарии
-          console.log(valueText)
-          const addFormText = document.querySelector('.add-form-text') // .value инициализирую форму ввода (значение формы ввода)
-          console.log(addFormText)
-          const deleteSpaces = valueText.replace(/\s/g, '') // удаляю пробелы
 
-          const g = (addFormText.innerText = `>${deleteSpaces}`)
+          const currentHeader = document.querySelector(
+            `[data-comment-header-index='${text.dataset.index}']`
+          ) // нахожу определенный заголовок по дата атрибуту
 
-          const final = g.innerHTML
+          const addFormText = document.querySelector('.add-form-text')
+
+          const valueText = currentText.textContent.replace(/\s/g, '') // значение текста в комментарии  hello           1
+
+          const valueHeader = currentHeader.textContent // значение заголовка в комментарии Dima       2
+
+          const newParagraph = document.createElement('p')
+          // newParagraph.textContent = valueText + '<br>' + valueHeader
+          newParagraph.appendChild(document.createTextNode(valueText))
+          // newParagraph.appendChild(document.createElement('br'))
+          newParagraph.appendChild(document.createTextNode(valueHeader))
+
+          console.log(newParagraph)
+
+          addFormText.innerHTML = newParagraph.innerHTML
+          addFormText.appendChild(newParagraph)
+
           e.stopPropagation()
           renderComments()
         })
@@ -100,30 +124,30 @@
       const commentsHTML = comments
         .map((comment, index) => {
           return `<li class="comment" data-idex="${index}">
-          <div class="comment-header">
-            <div data-comment-header-index='${index}'>${
+              <div class="comment-header">
+                <div data-comment-header-index='${index}'>${
             comment.inputValue
           }</div>
-            <div>${comment.date}</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text" data-index="${index}" >
-              ${comment.inputAddFormName}
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter" data-counter-index="${index}">${
+                <div>${comment.date}</div>
+              </div>
+              <div class="comment-body">
+                <div class="comment-text" data-index="${index}" >
+                  ${comment.inputAddFormName}
+                </div>
+              </div>
+              <div class="comment-footer">
+                <div class="likes">
+                  <span class="likes-counter" data-counter-index="${index}">${
             comment.isliked ? '1' : '0'
           } </span>
 
-              <button class='${
-                comment.isliked ? 'like-button -active-like' : 'like-button'
-              }' data-index="${index}"></button>
-             
-            </div>
-          </div>
-        </li>`
+                  <button class='${
+                    comment.isliked ? 'like-button -active-like' : 'like-button'
+                  }' data-index="${index}"></button>
+
+                </div>
+              </div>
+            </li>`
         })
         .join('')
       listComments.innerHTML = commentsHTML
@@ -156,7 +180,6 @@
       renderComments()
     })
 
-    renderComments()
-    initText()
+    renderComments() // начало
   </script>
 </html>
